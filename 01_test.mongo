@@ -1,0 +1,94 @@
+/*
+1. 操作db和collection
+mongo : cmd窗口中连接mongodb
+show dbs : 显示所有数据库
+use db_name : 声明使用某个数据库
+db: 显示当前数据库
+show collections : 显示当前数据库中的所有集合列表
+db.createCollection('users') : 创建一个空集合users
+db.createCollection('roles') : 创建一个空集合roles
+db.roles.drop() : 删除指定名称的集合
+db.dropDatabase() : 删除数据库
+*/
+
+/*
+2.1. C - Create 添加/插入一个或多个新的文档
+1). db.collection.insert({文档对象}) 向指定集合内插入一条文档数据
+2). db.collection.insert([{文档对象}, {文档对象}]) 向指定集合内插入多条文档数据
+说明: 插入数据时会自动生成标识字段_id: ObjectId
+*/
+/*
+需求
+说明: user文档的结构为:
+用户名
+密码
+年龄
+1.一次插件一个user
+2.一次插件多个user
+*/
+db.createCollection('roles')
+
+db.users.insert({
+  name: 'tom',
+  age: 12,
+  sex: '男'
+})
+db.users.insert([
+  {
+    name: 'Jack',
+    age: 11,
+    sex: '男'
+  },
+  {
+    name: 'marry',
+    age: 13,
+    sex: '女'
+  }
+])
+
+/*
+2.2. R - Read 查询一个或多个匹配的文档
+1). db.collection.find(查询条件, 投影) 当前数据库中指定集合内查询指定查询条件的所有文档
+2). db.collection.findOne(查询条件, 投影) 当前数据库中指定集合内查询指定查询条件的文档中的第一个
+查询条件中有操作符：
+1. $lt $gt $eq $lte $gte $ne : < > = <= >= !=
+2. 或：$in $or 非：$nin
+3. 正则表达式
+投影：过滤你不想要的字段
+*/
+/*
+需求:
+1. 查询一个年龄为11的用户
+2. 查询所有年龄不小于12的用户
+3. 将Jack和的信息查询出来
+4. 查询所有用户名以J开头的用户
+5. 查询所有用户名以J开头的用户, 但不需要性别
+*/
+db.users.findOne({age: 11})
+db.users.find({age: {$gte: 12}})
+db.users.find({name: {$in: ['Jack', 'marry']}})
+db.users.find({name: /^J/}, {sex: 0, age: 0})
+
+/*
+2.3. U - Update 更新文档
+db.collection.update(查询条件, 新数据) 默认只更新一个
+db.collection.update(查询条件, 新数据 , {multi: true}) 更新多个
+$set 只修改你设置的字段
+*/
+/*
+需求:
+1. 更新一个年龄小于13的用户的用户名为: atguigu
+2. 更新所有年龄小于13的用户的用户名为: atguigu2
+*/
+db.users.update( {age: {$lt: 13}}, {$set: {name: 'atguigu'}} )
+db.users.update({age: {$lt: 13}}, {$set: {name: 'atguigu3'}}, {multi: true})
+
+/*
+2.4. D - Delete 删除文档
+db.collection.remove(查询条件对象)
+*/
+/*
+需求:
+1. 删除所有年龄小于13的用户
+*/
+db.users.remove({age: {$lt: 13}})
