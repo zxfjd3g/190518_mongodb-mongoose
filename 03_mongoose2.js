@@ -12,7 +12,7 @@ const mongoose = require('mongoose')
 
 // 2. 连接数据库, 并监视连接是否成功
 const url = 'mongodb://localhost:27017/test2'
-mongoose.connect(url, { useNewUrlParser: true })
+mongoose.connect(url, { useNewUrlParser: true, useCreateIndexes: true })
   .then(() => {
     console.log('连接数据库成功')
   })
@@ -80,18 +80,18 @@ const UserModel = mongoose.model('users', userSchema)
 */
 function testAdd() {
   const user = {
-    name: 'damu2',
+    name: 'damu3',
     pwd: md5('123'),
-    age: 21,
+    age: 23,
     sex: '男',
     phone: '13712341234',
     likes: ['吃吃吃', '睡睡睡', '喝喝喝'],
     info: '看着不像女的'
   }
   const user2 = {
-    name: 'sadamu2',
+    name: 'sadamu3',
     pwd: md5('234'),
-    age: 21,
+    age: 23,
     sex: '男',
     phone: '13312341234',
     likes: ['吃吃吃', '睡睡睡', '喝喝喝'],
@@ -126,3 +126,66 @@ function testAdd() {
   )
 }
 // testAdd()
+
+/*
+测试查询
+3. 查询一个年龄为21的user
+4. 查询所有年龄为21的user
+5. 查询所有年龄为21的user, 但不需要user中的pwd数据
+*/
+function testQuery() {
+  // 3. 查询一个年龄为21的user
+  UserModel.findOne({age: 21}).then(
+    userDoc => {
+      console.log('查询成功1', userDoc)
+    },
+    error => {
+      console.log('查询失败1', error)
+    }
+  )
+
+  // 4. 查询所有年龄为21的user
+  // 5. 查询所有年龄为21的user, 但不需要user中的pwd数据
+  UserModel.find({age: 21}, {pwd: 0}).then(
+    userDocs => {
+      console.log('查询成功2', userDocs)
+    },
+    error => {
+      console.log('查询失败2', error)
+    }
+  )
+}
+// testQuery()
+
+/*
+测试更新
+6. 更新所有年龄为21的info为atuigu
+*/
+function testUpdate() {
+  UserModel.update({age: 21}, {info: 'atguigu'}, {multi: true}).then(
+    doc => {
+      console.log('更新成功', doc)
+    },
+    error => {
+      console.log('更新失败', error)
+    }
+  )
+
+}
+// testUpdate()
+
+/*
+测试删除
+7. 删除所有年龄小于22的user
+*/
+function testDelete() {
+  UserModel.remove({age: {$lt: 22}}).then(
+    doc => {
+      console.log('删除成功', doc)
+    },
+    error => {
+      console.log('删除失败', error)
+    }
+  )
+}
+testDelete()
