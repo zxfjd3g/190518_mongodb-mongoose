@@ -12,7 +12,7 @@ const mongoose = require('mongoose')
 
 // 2. 连接数据库, 并监视连接是否成功
 const url = 'mongodb://localhost:27017/test2'
-mongoose.connect(url, { useNewUrlParser: true, useCreateIndexes: true })
+mongoose.connect(url, { useNewUrlParser: true, useCreateIndex: true })
   .then(() => {
     console.log('连接数据库成功')
   })
@@ -179,7 +179,7 @@ function testUpdate() {
 7. 删除所有年龄小于22的user
 */
 function testDelete() {
-  UserModel.remove({age: {$lt: 22}}).then(
+  UserModel.deleteMany({age: {$lt: 22}}).then(
     doc => {
       console.log('删除成功', doc)
     },
