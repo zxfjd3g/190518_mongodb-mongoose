@@ -179,7 +179,7 @@ function testUpdate() {
 7. 删除所有年龄小于22的user
 */
 function testDelete() {
-  UserModel.deleteMany({age: {$lt: 22}}).then(
+  UserModel.deleteMany({age: {$lt: 23}}).then(
     doc => {
       console.log('删除成功', doc)
     },
