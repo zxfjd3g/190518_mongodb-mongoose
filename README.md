@@ -59,7 +59,7 @@
     
 ## 2. 连接数据库
     const mongoose = require('mongoose)
-    mongoose.connect(url).then(
+    mongoose.connect(url, options).then(
       () => {连接成功},
       error => {连接失败}
     )
@@ -74,4 +74,4 @@
     XxxModel.find(查询条件, 过滤投影).then()
     XxxModel.findOne(查询条件, 过滤投影).then()
     XxxModel.update(查询条件, {$set: 新数据}, {multi: true}).then()
-    XxxModel.remove(查询条件).then()
+    XxxModel.deleleOne/deleteMany(查询条件).then()
